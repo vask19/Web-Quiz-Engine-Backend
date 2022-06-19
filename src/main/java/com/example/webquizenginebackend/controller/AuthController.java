@@ -22,14 +22,11 @@ public class AuthController {
     }
 
 
+    //регістрація користувача
     @PostMapping("/api/register")
     public ResponseEntity<Object> register(@Valid @RequestBody SignupRequest signupRequest){
-        System.out.println(signupRequest);
-
         if (userService.findUserByUsername(signupRequest.getEmail()) != null){
             return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-
-
         }
 
         return new ResponseEntity<>(userService.createUser(signupRequest),HttpStatus.OK);

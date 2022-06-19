@@ -30,6 +30,8 @@ public class QuizController {
         this.quizFacade = quizFacade;
     }
 
+
+    //пошук вікторини по ід
     @GetMapping("/api/quizzes/{id}")
     public ResponseEntity<QuizDTO> getQuiz(@PathVariable Long id, Principal principal){
         QuizDTO quizDTO = quizService.getQuizById(id);
@@ -41,18 +43,18 @@ public class QuizController {
     }
 
 
+    // пошук всіх виконаних вікторин
     @GetMapping("/api/quizzes/completed")
     public Page<CompletedQuiz> getAllCompletedQuizzes(@RequestParam(defaultValue = "0") Integer page,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(defaultValue = "completedAt") String sortBy,
                                                       Principal principal){
-        var completedQuizPage = quizService.getAllCompetedQuizzes(principal,page,pageSize,sortBy);
-        return completedQuizPage;
+        return quizService.getAllCompetedQuizzes(principal,page,pageSize,sortBy);
 
 
 
     }
-
+    //пошук всіх вікторин
     @GetMapping("/api/quizzes")
     public ResponseEntity<QuizPage> getAllQuizzes(
             @RequestParam(defaultValue = "0") Integer page,
@@ -64,6 +66,7 @@ public class QuizController {
         return new ResponseEntity<>(quizPage,new HttpHeaders(),HttpStatus.OK);
     }
 
+    //пост вікторини
     @PostMapping("/api/quizzes")
     public ResponseEntity<QuizDTO> createNewQuiz(@Valid @RequestBody QuizDTO quizDTO,Principal principal){
         quizDTO = quizService.createQuiz(quizDTO,principal);
@@ -72,6 +75,7 @@ public class QuizController {
 
 
 
+    //пост відповіді на вікторину
     @PostMapping("/api/quizzes/{id}/solve")
     public ResponseEntity<QuizAnswerResponse> postAnswerToQuiz(@PathVariable Long id, @RequestBody Answer quizAnswerRequest, Principal principal){
         QuizAnswerResponse response = quizService.postAnswerToQuiz(principal,id,quizAnswerRequest);
@@ -82,6 +86,7 @@ public class QuizController {
 
     }
 
+    //видалення вікторини
     @DeleteMapping("/api/quizzes/{id}")
     public ResponseEntity<Object> deleteQuiz(@PathVariable Long id, Principal principal){
         quizService.deleteQuiz(id,principal);
