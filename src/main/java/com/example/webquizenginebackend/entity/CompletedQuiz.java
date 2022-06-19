@@ -1,13 +1,9 @@
 package com.example.webquizenginebackend.entity;
-
-
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -18,25 +14,17 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "completed_quiz")
 public class CompletedQuiz {
-
-
-
-
     @Column
     @JsonIgnore
     private Long userId;
-
     @Column
     private LocalDateTime completedAt;
-
     @Column
     private Long id;
-
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long q;
-
 
 }

@@ -1,7 +1,4 @@
 package com.example.webquizenginebackend.repository;
-
-
-
 import com.example.webquizenginebackend.entity.Quiz;
 import com.example.webquizenginebackend.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,9 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz,Long> {
-
-
-
 
     Optional<Quiz> findById(Long id);
 

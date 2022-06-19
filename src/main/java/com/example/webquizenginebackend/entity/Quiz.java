@@ -1,15 +1,10 @@
 package com.example.webquizenginebackend.entity;
-
-
 import com.example.webquizenginebackend.dto.QuizDTO;
 import lombok.AllArgsConstructor;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.List;
-
 
 @Data
 @AllArgsConstructor
@@ -30,10 +25,8 @@ public class Quiz {
     @Column
     @ElementCollection
     private List<Integer> answer;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Users user;
-
     public Quiz(QuizDTO quizDTO) {
         this.title = quizDTO.getTitle();
         this.text = quizDTO.getText();

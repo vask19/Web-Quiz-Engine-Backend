@@ -63,35 +63,37 @@ public class QuizService {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortedBy));
          var  pagedResult = quizPagingAndSortedRepository.findAll(paging);
          return quizDTOPageFacade.pageToQuizDTOPAge(pagedResult);
-
-
-//
     }
-
 
     //перевіряє відповіді на конкретну вікторину
     public QuizAnswerResponse postAnswerToQuiz(Principal principal , Long id, Answer quizAnswerRequest) {
-
        Quiz quiz = quizRepository.findById(id).orElseThrow(()-> new QuizNotFoundException("Quiz not found"));
        QuizAnswerResponse quizAnswerResponse;
-        if (CollectionUtils.isEqualCollection(quizAnswerRequest.getAnswer(),quiz.getAnswer())){
-            Users user = getUserByPrincipal(principal);
-            quizAnswerResponse = new QuizAnswerResponse();
-            quizAnswerResponse.setSuccess(true);
-            quizAnswerResponse.setFeedback("Congratulations, you're right!");
-            CompletedQuiz completedQuiz = CompletedQuiz
-                    .builder()
-                    .id(quiz.getId())
-                    .userId(user.getId())
-                    .completedAt(LocalDateTime.now())
-                    .build();
-            completedQuizRepository.save(completedQuiz);
-        }
+        if (CollectionUtils.isEqualCollection(quizAnswerRequest.getAnswer(),quiz.getAnswer()))
+            quizAnswerResponse = savingAnswerToQuiz(principal,quiz);
+
         else{
             quizAnswerResponse = new QuizAnswerResponse();
             quizAnswerResponse.setSuccess(false);
             quizAnswerResponse.setFeedback("Wrong answer! Please, try again.");
         }
+        return quizAnswerResponse;
+    }
+    //зберігає відповідь на лотерею
+    private QuizAnswerResponse savingAnswerToQuiz(Principal principal,Quiz quiz){
+        QuizAnswerResponse quizAnswerResponse;
+        Users user = getUserByPrincipal(principal);
+
+        CompletedQuiz completedQuiz = CompletedQuiz
+                .builder()
+                .id(quiz.getId())
+                .userId(user.getId())
+                .completedAt(LocalDateTime.now())
+                .build();
+        completedQuizRepository.save(completedQuiz);
+        quizAnswerResponse = new QuizAnswerResponse();
+        quizAnswerResponse.setSuccess(true);
+        quizAnswerResponse.setFeedback("Congratulations, you're right!");
         return quizAnswerResponse;
     }
 
